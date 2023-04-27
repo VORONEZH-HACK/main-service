@@ -1,0 +1,611 @@
+openapi: 3.0.2
+info:
+  description: api v1 for config service
+  version: 1.0.0
+  title: voronezh-hack
+  contact:
+    name: Kandakov Danil
+servers:
+  - url: http://localhost:10000
+tags:
+  - name: Auth
+    description: authentication interface
+  - name: User
+    description: user interface
+  - name: Team
+    description: team interface
+  - name: Event
+    description: event interface
+  - name: File
+    description: file interface
+paths:
+  /register:
+    post:
+      description: register
+      operationId: register
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user-create"
+      responses:
+        '200':
+          description: register ok
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+  
+  /login:
+    patch:
+      description: login
+      operationId: login
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: login  ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  access-token:
+                    type: string
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+  
+  /logout:
+    patch:
+      description: logout
+      operationId: logout
+      tags:
+        - Auth
+      parameters:
+        - in: header
+          name: Access-Token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: logout ok
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+  
+  /token:
+    get:
+      description: token-check
+      operationId: token-check
+      tags:
+        - Auth
+      parameters:
+        - in: header
+          name: Access-Token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: token ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  uuid:
+                    type: string
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+  
+  /user/{uuid}:
+    get:
+      description: user-get
+      operationId: user-get
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Access-Token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: send user data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+          
+  /team/{uuid}:
+    get:
+      description: get team
+      operationId: team-get
+      tags:
+        - Team
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Access-Token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: send user data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/team"
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+  /team:
+    post:
+      description: create team
+      operationId: team-post
+      tags:
+        - Team
+      parameters:
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/team-create"
+      responses:
+        '200':
+          description: team created
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+  /invite:
+    patch:
+      description: accept invite
+      operationId: invite-patch
+      tags:
+        - Team
+      parameters:
+        - in: query
+          name: invite-uuid
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: invite accepted
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+    
+    post:
+      description: send invite
+      operationId: invite-post
+      tags:
+        - Team
+      parameters:
+        - in: query
+          name: user-uuid
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: invite accepted
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+    get:
+      description: get invites list
+      operationId: invite-get
+      tags:
+        - Team
+      parameters:
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: invite accepted
+          content:
+            application/json:
+              schema:
+                properties:
+                  invites:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/invites-min"
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error 
+    
+  /events:
+    post:
+      description:  event
+      operationId: event-post
+      tags:
+        - Event
+      parameters:
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/event-create"
+      responses:
+        '200':
+          description: create new event
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+    get:
+      description: event
+      operationId: events-get
+      tags:
+        - Event
+      parameters:
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          schema:
+            type: integer
+        - in: query
+          name: end_date
+          schema:
+            type: integer
+        - in: query
+          name: filter_type
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: we send events
+          content:
+            application/json:
+              schema: 
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref:  "#/components/schemas/event-min"
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+    
+  /events/{uuid}:
+    get:
+      description:  event
+      operationId: event-get
+      tags:
+        - Event
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: event ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/event"
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+  /file:
+    post:
+      description: file create
+      operationId: file-post
+      tags:
+        - File
+      parameters:
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: file ok
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+    get:
+      description: files get
+      operationId: file-get
+      tags:
+        - File
+      parameters:
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: user-uuid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: file ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  files:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/file-min"
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+  /file/{uuid}:
+    get:
+      description:  event
+      operationId: files-get
+      tags:
+        - File
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Access-Token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: file ok
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+components:
+  schemas:
+    user-create:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        patronymic:
+          type: string
+        surname:
+          type: string
+
+    user-min:
+      properties:
+        uuid:
+          type: integer
+        name:
+          type: string
+        patronymic:
+          type: string
+        surname:
+          type: string
+
+    user:
+      properties:
+        uuid:
+          type: string
+        name:
+          type: string
+        patronymic:
+          type: string
+        surname:
+          type: string
+        rating:
+          type: integer
+  
+    team-create:
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    team-min:
+      properties:
+        name:
+          type: string
+    
+    team:
+      properties:
+        name:
+          type: string
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/user-min"
+      
+    invite-min:
+      properties:
+        uuid:
+          type: string
+        team-uuid:
+          type: string
+      
+    event-create:
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        start:
+          type: integer
+        end:
+          type: integer
+        min_participants:
+          type: integer
+        max_participants:
+          type: integer
+        place:
+          type: string
+
+    event-min:
+      properties:
+        uuid:
+          type: string
+        name:
+          type: string
+        description:
+          type: number
+        start:
+          type: integer
+        end:
+          type: integer
+        rating:
+          type: number
+        min_participants:
+          type: integer
+        max_participants:
+          type: integer
+        place:
+          type: string
+
+    event:
+      properties:
+        uuid:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        start:
+          type: integer
+        end:
+          type: integer
+        place:
+          type: string
+        rating:
+          type: number
+        min_participants:
+          type: integer
+        max_participants:
+          type: integer
+        teams:
+          type: array
+          items:
+            $ref: "#/components/schemas/team-min"
+    
+    file-min:
+      properties:
+        uuid:
+          type: string
+        name: 
+          type: string
+        user: 
+          type: string
+        

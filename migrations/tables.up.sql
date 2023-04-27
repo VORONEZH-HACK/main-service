@@ -6,11 +6,12 @@ CREATE SCHEMA IF NOT EXISTS fsp;
 CREATE TABLE fsp.users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email TEXT NOT NULL,
-  password TEXT,
+  password TEXT NOT NULL,
 
-  edu TEXT DEFAULT NULL,
+  rating INTEGER DEFAULT 0,
+  edu TEXT NOT NULL DEFAULT '',
   name TEXT NOT NULL,
-  description TEXT,
+  description TEXT NOT NULL DEFAULT '',
   patronymic TEXT NOT NULL,
   surname TEXT NOT NULL
 );
@@ -25,15 +26,15 @@ CREATE TABLE fsp.users_x_tags (
 CREATE TABLE fsp.organizations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email TEXT NOT NULL,
-  password TEXT,
+  password TEXT NOT NULL,
 
   name TEXT NOT NULL
 );
 
 CREATE TABLE fsp.tokens (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  salt TEXT,
-  created DEFAULT now()
+  -- salt TEXT NOT NULL DEFAULT '',
+  created TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE fsp.users_x_roles (
@@ -74,15 +75,16 @@ CREATE TABLE fsp.invites (
 CREATE TABLE fsp.events (
   id UUID PRIMARY KEY,
   name TEXT NOT NULL,
-  description TEXT,
+  description TEXT NOT NULL DEFAULT '',
   owner UUID NOT NULL,
-  rating REAL,
+  place TEXT NOT NULL DEFAULT '',
+  rating REAL NOT NULL DEFAULT 0,
   min_participants INTEGER NOT NULL DEFAULT 1,
   max_participants INTEGER NOT NULL DEFAULT 5,
   start_date BIGINT NOT NULL,
-  end_date BIGINT NOT NULL,
+  end_date BIGINT NOT NULL
 
-  FOREIGN KEY (owner) REFERENCES fsp.organizations(id)
+  -- FOREIGN KEY (owner) REFERENCES fsp.organizations(id)
 );
 
 CREATE TABLE fsp.events_x_teams (

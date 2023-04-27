@@ -5,6 +5,8 @@ INSERT INTO fsp.events (
   min_participants, 
   max_participants, 
   start_date,
-  end_date)
-VALUES ($1, $2, $3, $4, $5, $6, $7) 
+  end_date,
+  place
+)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
 RETURNING id

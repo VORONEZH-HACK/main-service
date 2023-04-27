@@ -1,1 +1,5 @@
-SELECT id, team FROM fsp.invites WHERE userid=$1
+SELECT 
+  id, 
+  team 
+FROM fsp.invites 
+WHERE userid=$1

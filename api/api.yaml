@@ -327,15 +327,15 @@ paths:
           schema:
             type: string
         - in: query
-          name: start_date
+          name: start-date
           schema:
             type: integer
         - in: query
-          name: end_date
+          name: end-date
           schema:
             type: integer
         - in: query
-          name: filter_type
+          name: filter-type
           schema: 
             type: string
       responses:
@@ -518,12 +518,20 @@ components:
 
     team-min:
       properties:
+        uuid:
+          type: string
+        lead:
+          type: string
         name:
           type: string
     
     team:
       properties:
+        uuid:
+          type: string
         name:
+          type: string
+        lead:
           type: string
         users:
           type: array
@@ -543,13 +551,13 @@ components:
           type: string
         description:
           type: string
-        start:
+        startDate:
           type: integer
-        end:
+        endDate:
           type: integer
-        min_participants:
+        min-participants:
           type: integer
-        max_participants:
+        max-participants:
           type: integer
         place:
           type: string
@@ -562,15 +570,15 @@ components:
           type: string
         description:
           type: number
-        start:
+        startDate:
           type: integer
-        end:
+        endDate:
           type: integer
         rating:
           type: number
-        min_participants:
+        min-participants:
           type: integer
-        max_participants:
+        max-participants:
           type: integer
         place:
           type: string
@@ -583,17 +591,17 @@ components:
           type: string
         description:
           type: string
-        start:
+        startDate:
           type: integer
-        end:
+        endDate:
           type: integer
         place:
           type: string
         rating:
           type: number
-        min_participants:
+        min-participants:
           type: integer
-        max_participants:
+        max-participants:
           type: integer
         teams:
           type: array

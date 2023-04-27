@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   description: api v1 for config service
-  version: 1.0.0
+  version: 1.0.12
   title: voronezh-hack
   contact:
     name: Kandakov Danil
@@ -19,7 +19,7 @@ tags:
   - name: File
     description: file interface
 paths:
-  /register:
+  /user/register:
     post:
       description: register
       operationId: register
@@ -40,7 +40,7 @@ paths:
         '500':
           description: internal server error
   
-  /login:
+  /user/login:
     patch:
       description: login
       operationId: login
@@ -85,6 +85,58 @@ paths:
       responses:
         '200':
           description: logout ok
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+
+  /organization/register:
+    post:
+      description: register
+      operationId: register
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/organization-create"
+      responses:
+        '200':
+          description: register ok
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+  
+  /organization/login:
+    patch:
+      description: login
+      operationId: login
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: login  ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  access-token:
+                    type: string
         '400':
           description: wrong fields format
         '401':
@@ -485,6 +537,15 @@ components:
         surname:
           type: string
 
+    organization-create:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+
     user-min:
       properties:
         uuid:
@@ -569,7 +630,7 @@ components:
         name:
           type: string
         description:
-          type: number
+          type: string
         startDate:
           type: integer
         endDate:

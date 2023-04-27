@@ -11,7 +11,7 @@ import (
 
 func EventsUuidGet(c echo.Context) error {
 	type ResponseBody struct {
-		models.EventMin
+		models.Event
 		Teams []struct {
 			Uuid string `json:"uuid"`
 			Name string `json:"name"`

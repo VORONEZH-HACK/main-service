@@ -1,6 +1,6 @@
 docker-run:
-	docker rmi golang-service-img || true
-	docker build -t golang-service-img .
+	docker rmi main-service-img || true
+	docker build -t main-service-img .
 
 	docker-compose up
 

@@ -1,6 +1,6 @@
 package models
 
-type EventMin struct {
+type Event struct {
 	Uuid              string  `json:"uuid"`
 	Name              string  `json:"name"`
 	Owner             string  `json:"owner"`

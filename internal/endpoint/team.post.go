@@ -10,12 +10,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func EventPost(c echo.Context) error {
+func TeamPost(c echo.Context) error {
 	reqBytes, err := io.ReadAll(c.Request().Body)
 	if err != nil {
 		return echo.NewHTTPError(400)
 	}
-	var reqBody models.Event
+	var reqBody models.Team
 	err = json.Unmarshal(reqBytes, reqBody)
 	if err != nil {
 		return echo.NewHTTPError(400)
@@ -30,15 +30,9 @@ func EventPost(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	row := conn.QueryRow(db.PostgresQLDB.Get("insert_event"),
+	row := conn.QueryRow(db.PostgresQLDB.Get("insert_team"),
 		reqBody.Name,
-		reqBody.Description,
-		reqBody.Owner,
-		reqBody.MinParticipants,
-		reqBody.MaxParticipants,
-		reqBody.StartDate,
-		reqBody.EndDate,
-		reqBody.Place,
+		reqBody.Lead,
 	)
 	err = row.Scan(&resBody.Uuid)
 	if err != nil {

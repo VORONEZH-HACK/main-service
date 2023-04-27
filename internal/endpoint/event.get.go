@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func getEvents(conn *sql.DB, events []models.EventMin, rType string, startDate string, endDate string) ([]models.EventMin, error) {
+func getEvents(conn *sql.DB, events []models.Event, rType string, startDate string, endDate string) ([]models.Event, error) {
 	if startDate == "" || endDate == "" {
 		return events, echo.NewHTTPError(400)
 	}
@@ -29,7 +29,7 @@ func getEvents(conn *sql.DB, events []models.EventMin, rType string, startDate s
 		return events, echo.NewHTTPError(400)
 	}
 	for rows.Next() {
-		var event models.EventMin
+		var event models.Event
 		err := rows.Scan(
 			&event.Uuid,
 			&event.Name,
@@ -53,7 +53,7 @@ func getEvents(conn *sql.DB, events []models.EventMin, rType string, startDate s
 
 func EventGet(c echo.Context) error {
 	type ResponseBody struct {
-		Events []models.EventMin `json:"events"`
+		Events []models.Event `json:"events"`
 	}
 
 	var resBody ResponseBody
@@ -84,7 +84,7 @@ func EventGet(c echo.Context) error {
 			return echo.NewHTTPError(400)
 		}
 		for rows.Next() {
-			var event models.EventMin
+			var event models.Event
 			err := rows.Scan(
 				&event.Uuid,
 				&event.Name,

@@ -27,6 +27,8 @@ CREATE TABLE fsp.organizations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email TEXT NOT NULL,
   password TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  phone TEXT NOT NULL DEFAULT '',
 
   name TEXT NOT NULL
 );

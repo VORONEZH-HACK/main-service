@@ -52,9 +52,13 @@ func Start() {
 	// }
 
 	var db_requests = []string{
-		"accept_invite", "select_event", "select_invites", "insert_event",
-		"select_events_date", "select_team", "insert_invite", "select_events_participants",
-		"select_user", "insert_team", "select_events_rating",
+		"accept_invite", "select_events_date",
+		"insert_event", "select_events_newest",
+		"insert_invite", "select_events_popular",
+		"insert_team", "select_invites",
+		"select_event", "select_team",
+		"select_event_teams", "select_team_users",
+		"select_events_best", "select_user",
 	}
 	for i := 0; i < len(db_requests); i++ {
 		db.PostgresQLDB.Prepare("internal/sql/", db_requests[i])
@@ -64,7 +68,12 @@ func Start() {
 	e.Use(middleware.Error)
 	e.Use(middleware.Logger)
 	e.GET("/user/:uuid", endpoint.UserUuidGet)
-	log.Print(e.Start(":10000").Error())
+	e.GET("/tean/:uuid", endpoint.TeamUuidGet)
+	e.GET("/events/:uuid", endpoint.EventsUuidGet)
+	e.GET("/events", endpoint.EventPost)
+	e.GET("/events", endpoint.EventGet)
+	e.POST("/tream", endpoint.TeamPost)
+	log.Print(e.Start(":10001").Error())
 }
 
 func main() {

@@ -12,7 +12,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-var API_PRFIX string = "/api/v1"
+var API_PREFIX string = "/api/v1"
 
 func Start() {
 	rand.Seed(time.Now().UnixNano())
@@ -67,12 +67,12 @@ func Start() {
 	e := echo.New()
 	e.Use(middleware.Error)
 	e.Use(middleware.Logger)
-	e.GET("/user/:uuid", endpoint.UserUuidGet)
-	e.GET("/tean/:uuid", endpoint.TeamUuidGet)
-	e.GET("/events/:uuid", endpoint.EventsUuidGet)
-	e.GET("/events", endpoint.EventPost)
-	e.GET("/events", endpoint.EventGet)
-	e.POST("/tream", endpoint.TeamPost)
+	e.GET(API_PREFIX+"/user/:uuid", endpoint.UserUuidGet)
+	e.GET(API_PREFIX+"/tean/:uuid", endpoint.TeamUuidGet)
+	e.GET(API_PREFIX+"/events/:uuid", endpoint.EventsUuidGet)
+	e.GET(API_PREFIX+"/events", endpoint.EventPost)
+	e.GET(API_PREFIX+"/events", endpoint.EventGet)
+	e.POST(API_PREFIX+"/tream", endpoint.TeamPost)
 	log.Print(e.Start(":10001").Error())
 }
 

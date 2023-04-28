@@ -51,16 +51,16 @@ func getEvents(conn *sql.DB, events []models.Event, rType string, startDate stri
 	return events, nil
 }
 
-func EventGet(c echo.Context) error {
+func EventsGet(c echo.Context) error {
 	type ResponseBody struct {
 		Events []models.Event `json:"events"`
 	}
 
 	var resBody ResponseBody
 
-	filterType := c.Param("filter-type")
-	startDate := c.Param("start-date")
-	endDate := c.Param("end-date")
+	filterType := c.QueryParam("filter-type")
+	startDate := c.QueryParam("start-date")
+	endDate := c.QueryParam("end-date")
 
 	conn, err := db.PostgresQLDB.Open()
 	if err != nil {
@@ -69,17 +69,17 @@ func EventGet(c echo.Context) error {
 	defer conn.Close()
 
 	if filterType == "" {
-		resBody.Events, err = getEvents(conn, resBody.Events, "select_event_date", startDate, endDate)
+		resBody.Events, err = getEvents(conn, resBody.Events, "select_events_date", startDate, endDate)
 		if err != nil {
 			return err
 		}
 	} else if filterType == "best" {
-		resBody.Events, err = getEvents(conn, resBody.Events, "select_event_best", startDate, endDate)
+		resBody.Events, err = getEvents(conn, resBody.Events, "select_events_best", startDate, endDate)
 		if err != nil {
 			return err
 		}
 	} else if filterType == "newest" {
-		rows, err := conn.Query(db.PostgresQLDB.Get("select_event_newest"))
+		rows, err := conn.Query(db.PostgresQLDB.Get("select_events_newest"))
 		if err != nil {
 			return echo.NewHTTPError(400)
 		}
@@ -103,7 +103,7 @@ func EventGet(c echo.Context) error {
 			resBody.Events = append(resBody.Events, event)
 		}
 	} else if filterType == "popular" {
-		resBody.Events, err = getEvents(conn, resBody.Events, "select_event_popular", startDate, endDate)
+		resBody.Events, err = getEvents(conn, resBody.Events, "select_events_popular", startDate, endDate)
 		if err != nil {
 			return err
 		}

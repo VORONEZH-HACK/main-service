@@ -61,7 +61,10 @@ func Start() {
 		"select_events_best", "select_user",
 	}
 	for i := 0; i < len(db_requests); i++ {
-		db.PostgresQLDB.Prepare("internal/sql/", db_requests[i])
+		err := db.PostgresQLDB.Prepare("internal/sql/", db_requests[i])
+		if err != nil {
+			log.Print(err.Error())
+		}
 	}
 
 	e := echo.New()
@@ -70,8 +73,8 @@ func Start() {
 	e.GET(API_PREFIX+"/user/:uuid", endpoint.UserUuidGet)
 	e.GET(API_PREFIX+"/tean/:uuid", endpoint.TeamUuidGet)
 	e.GET(API_PREFIX+"/events/:uuid", endpoint.EventsUuidGet)
-	e.GET(API_PREFIX+"/events", endpoint.EventPost)
-	e.GET(API_PREFIX+"/events", endpoint.EventGet)
+	e.POST(API_PREFIX+"/events", endpoint.EventsPost, middleware.Auth)
+	e.GET(API_PREFIX+"/events", endpoint.EventsGet)
 	e.POST(API_PREFIX+"/tream", endpoint.TeamPost)
 	log.Print(e.Start(":10001").Error())
 }

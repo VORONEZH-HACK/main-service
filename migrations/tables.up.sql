@@ -36,6 +36,7 @@ CREATE TABLE fsp.organizations (
 CREATE TABLE fsp.tokens (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   -- salt TEXT NOT NULL DEFAULT '',
+  "type" TEXT NOT NULL DEFAULT 'USER',
   created TIMESTAMP DEFAULT now()
 );
 
@@ -75,7 +76,7 @@ CREATE TABLE fsp.invites (
 );
 
 CREATE TABLE fsp.events (
-  id UUID PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   description TEXT NOT NULL DEFAULT '',
   owner UUID NOT NULL,

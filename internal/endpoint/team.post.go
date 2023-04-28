@@ -16,7 +16,7 @@ func TeamPost(c echo.Context) error {
 		return echo.NewHTTPError(400)
 	}
 	var reqBody models.Team
-	err = json.Unmarshal(reqBytes, reqBody)
+	err = json.Unmarshal(reqBytes, &reqBody)
 	if err != nil {
 		return echo.NewHTTPError(400)
 	}

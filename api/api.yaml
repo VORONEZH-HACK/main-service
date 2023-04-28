@@ -95,7 +95,7 @@ paths:
   /organization/register:
     post:
       description: register
-      operationId: register
+      operationId: organization-register
       tags:
         - Auth
       requestBody:
@@ -116,7 +116,7 @@ paths:
   /organization/login:
     patch:
       description: login
-      operationId: login
+      operationId: organization-login
       tags:
         - Auth
       requestBody:
@@ -599,7 +599,7 @@ components:
           items:
             $ref: "#/components/schemas/user-min"
       
-    invite-min:
+    invites-min:
       properties:
         uuid:
           type: string

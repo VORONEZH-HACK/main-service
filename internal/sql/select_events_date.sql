@@ -10,4 +10,4 @@ SELECT
   max_participants,
   rating
 FROM fsp.events
-WHERE start_date > $2 AND end_date < $1
+WHERE start_date > $1 AND end_date < $2

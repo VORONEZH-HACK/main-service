@@ -8,12 +8,12 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type PostgreSQl struct {
+type PostgresQL struct {
 	Requests map[string]string
 	Options  string
 }
 
-func (db *PostgreSQl) Prepare(pathToRequestFiles string, request string) error {
+func (db *PostgresQL) Prepare(pathToRequestFiles string, request string) error {
 	dat, err := os.ReadFile(pathToRequestFiles + request + ".sql")
 	if err != nil {
 		return err
@@ -23,11 +23,11 @@ func (db *PostgreSQl) Prepare(pathToRequestFiles string, request string) error {
 	return nil
 }
 
-func (db *PostgreSQl) Get(request string) string {
+func (db *PostgresQL) Get(request string) string {
 	return db.Requests[request]
 }
 
-func (db *PostgreSQl) Open() (*sql.DB, error) {
+func (db *PostgresQL) Open() (*sql.DB, error) {
 	dbconn, err := sql.Open("postgres", db.Options)
 	if err != nil {
 		return nil, err
@@ -35,9 +35,9 @@ func (db *PostgreSQl) Open() (*sql.DB, error) {
 	return dbconn, nil
 }
 
-var PostgresQLDB PostgreSQl
+var PostgresQLDB PostgresQL
 
-func (db *PostgreSQl) Init(options DatabaseOptions) error {
+func (db *PostgresQL) Init(options DatabaseOptions) error {
 	db.Requests = make(map[string]string)
 	db.Options = fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=require",

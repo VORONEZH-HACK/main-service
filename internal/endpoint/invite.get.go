@@ -1,7 +1,6 @@
 package endpoint
 
 import (
-	"database/sql"
 	"encoding/json"
 
 	db "github.com/VORONEZH-HACK/main-service/internal/database"
@@ -38,34 +37,6 @@ func InviteGet(c echo.Context) error {
 			return echo.NewHTTPError(500)
 		}
 		resBody.Invites = append(resBody.Invites, invite)
-	}
-
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return echo.NewHTTPError(404, "not found")
-		} else {
-			return err
-		}
-	}
-
-	rows, err := conn.Query(db.PostgresQLDB.Get("select_event_teams"), uuid)
-	defer conn.Close()
-	if err != nil {
-		return echo.NewHTTPError(500)
-	}
-	for rows.Next() {
-		var team struct {
-			Uuid string `json:"uuid"`
-			Name string `json:"name"`
-		}
-		err := rows.Scan(&team.Uuid, &team.Name)
-		if err != nil {
-			return echo.NewHTTPError(500)
-		}
-		resBody.Teams = append(resBody.Teams, team)
-	}
-	if err != nil {
-		return echo.NewHTTPError(500)
 	}
 
 	resBytes, err := json.Marshal(resBody)

@@ -6,7 +6,7 @@ info:
   contact:
     name: Kandakov Danil
 servers:
-  - url: http://localhost:10000
+  - url: http://158.160.18.237:10000
 tags:
   - name: Auth
     description: authentication interface
@@ -18,6 +18,8 @@ tags:
     description: event interface
   - name: File
     description: file interface
+  - name: Parsing
+    description: parsing interface
 paths:
   /user/register:
     post:
@@ -292,7 +294,12 @@ paths:
         - Team
       parameters:
         - in: query
-          name: user-uuid
+          name: team
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: userid
           required: true
           schema:
             type: string
@@ -494,7 +501,23 @@ paths:
           description: wrong authentication data
         '500':
           description: internal server error
-
+  
+  /parse_resume:
+    post:
+      description: find tags
+      operationId: find-tags
+      tags:
+        - File
+      responses:
+        '200':
+          description: file ok
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+  
   /file/{uuid}:
     get:
       description:  event
@@ -521,7 +544,51 @@ paths:
           description: wrong authentication data
         '500':
           description: internal server error
-
+  
+  /codeforces/{username}:
+    get:
+      description: parse condeforces profile
+      operationId: codeforces-parse
+      tags:
+        - Parsing
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: parsing ok, send data
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+          
+  /leetcode/{username}:
+    get:
+      description: parse leetcode
+      operationId: leetcode-parse
+      tags:
+        - Parsing
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: parsing ok, send data
+        '400':
+          description: wrong fields format
+        '401':
+          description: wrong authentication data
+        '500':
+          description: internal server error
+  
 components:
   schemas:
     user-create:

@@ -58,7 +58,7 @@ func Start() {
 		"insert_team", "select_invites",
 		"select_event", "select_team",
 		"select_event_teams", "select_team_users",
-		"select_events_best", "select_user",
+		"select_events_best", "select_user", "select_user_x_team",
 	}
 	for i := 0; i < len(db_requests); i++ {
 		err := db.PostgresQLDB.Prepare("internal/sql/", db_requests[i])

@@ -3,6 +3,7 @@ package endpoint
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 
 	db "github.com/VORONEZH-HACK/main-service/internal/database"
 	"github.com/labstack/echo/v4"
@@ -40,8 +41,9 @@ func TeamUuidGet(c echo.Context) error {
 		}
 	}
 
-	rows, err := conn.Query(db.PostgresQLDB.Get("select_teams_users"), uuid)
+	rows, err := conn.Query(db.PostgresQLDB.Get("select_team_users"), uuid)
 	if err != nil {
+		log.Print(err.Error())
 		return echo.NewHTTPError(500)
 	}
 	for rows.Next() {
@@ -52,18 +54,21 @@ func TeamUuidGet(c echo.Context) error {
 			Surname    string `json:"surname"`
 		}
 		err := rows.Scan(&user.Uuid, &user.Name, &user.Patronomic, &user.Surname)
-		if err != nil {
-			return echo.NewHTTPError(500)
+		if err == sql.ErrNoRows {
+			break
+		} else {
+			if err != sql.ErrNoRows && err != nil {
+				log.Print(err.Error())
+				return echo.NewHTTPError(500)
+			}
 		}
 		resBody.Users = append(resBody.Users, user)
-	}
-	if err != nil {
-		return echo.NewHTTPError(500)
 	}
 
 	resBytes, err := json.Marshal(resBody)
 	if err != nil {
-		return err
+		log.Print(err.Error())
+		return echo.NewHTTPError(500)
 	}
 
 	c.Response().Header().Set("Content-Type", "application/json")

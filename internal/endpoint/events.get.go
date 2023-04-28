@@ -3,6 +3,7 @@ package endpoint
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	db "github.com/VORONEZH-HACK/main-service/internal/database"
@@ -23,6 +24,8 @@ func getEvents(conn *sql.DB, events []models.Event, rType string, startDate stri
 	if err != nil {
 		return events, echo.NewHTTPError(400)
 	}
+
+	fmt.Println(startDateUnix, " ", endDateUnix)
 
 	rows, err := conn.Query(db.PostgresQLDB.Get(rType), startDateUnix, endDateUnix)
 	if err != nil {

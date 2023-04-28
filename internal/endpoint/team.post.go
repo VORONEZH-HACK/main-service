@@ -11,6 +11,8 @@ import (
 )
 
 func TeamPost(c echo.Context) error {
+	userId := c.Request().Header.Get("User-Id")
+
 	reqBytes, err := io.ReadAll(c.Request().Body)
 	if err != nil {
 		return echo.NewHTTPError(400)
@@ -32,7 +34,7 @@ func TeamPost(c echo.Context) error {
 	}
 	row := conn.QueryRow(db.PostgresQLDB.Get("insert_team"),
 		reqBody.Name,
-		reqBody.Lead,
+		userId,
 	)
 	err = row.Scan(&resBody.Uuid)
 	if err != nil {

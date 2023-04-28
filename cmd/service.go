@@ -75,10 +75,10 @@ func Start() {
 	e.GET(API_PREFIX+"/events/:uuid", endpoint.EventsUuidGet)
 	e.POST(API_PREFIX+"/events", endpoint.EventsPost, middleware.Auth)
 	e.GET(API_PREFIX+"/events", endpoint.EventsGet)
-	e.POST(API_PREFIX+"/team", endpoint.TeamPost)
-	e.GET(API_PREFIX+"/invite", endpoint.InviteGet)
-	e.POST(API_PREFIX+"/invite", endpoint.InvitePost)
-	e.PATCH(API_PREFIX+"/invite", endpoint.InvitePatch)
+	e.POST(API_PREFIX+"/team", endpoint.TeamPost, middleware.Auth)
+	e.GET(API_PREFIX+"/invite", endpoint.InviteGet, middleware.Auth)
+	e.POST(API_PREFIX+"/invite", endpoint.InvitePost, middleware.Auth)
+	e.PATCH(API_PREFIX+"/invite", endpoint.InvitePatch, middleware.Auth)
 	log.Print(e.Start(":10001").Error())
 }
 

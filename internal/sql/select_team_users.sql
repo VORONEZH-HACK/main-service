@@ -5,4 +5,4 @@ SELECT
   id, 
   name 
 FROM fsp.users 
-WHERE id=ANY(SELECT team FROM teams)
+WHERE id=ANY(SELECT userid FROM teams)

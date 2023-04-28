@@ -53,6 +53,7 @@ CREATE TABLE fsp.roles (
 CREATE TABLE fsp.teams (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
   lead UUID NOT NULL,
 
   FOREIGN KEY (lead) REFERENCES fsp.users(id)

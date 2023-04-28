@@ -97,6 +97,7 @@ func EventsGet(c echo.Context) error {
 				&event.MaxParticipants,
 				&event.Rating,
 			)
+
 			if err != nil {
 				return echo.NewHTTPError(500)
 			}

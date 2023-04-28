@@ -71,11 +71,14 @@ func Start() {
 	e.Use(middleware.Error)
 	e.Use(middleware.Logger)
 	e.GET(API_PREFIX+"/user/:uuid", endpoint.UserUuidGet)
-	e.GET(API_PREFIX+"/tean/:uuid", endpoint.TeamUuidGet)
+	e.GET(API_PREFIX+"/team/:uuid", endpoint.TeamUuidGet)
 	e.GET(API_PREFIX+"/events/:uuid", endpoint.EventsUuidGet)
 	e.POST(API_PREFIX+"/events", endpoint.EventsPost, middleware.Auth)
 	e.GET(API_PREFIX+"/events", endpoint.EventsGet)
-	e.POST(API_PREFIX+"/tream", endpoint.TeamPost)
+	e.POST(API_PREFIX+"/team", endpoint.TeamPost)
+	e.GET(API_PREFIX+"/invite", endpoint.InviteGet)
+	e.POST(API_PREFIX+"/invite", endpoint.InvitePost)
+	e.PATCH(API_PREFIX+"/invite", endpoint.InvitePatch)
 	log.Print(e.Start(":10001").Error())
 }
 

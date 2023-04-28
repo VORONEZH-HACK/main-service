@@ -45,8 +45,8 @@ func EventsPost(c echo.Context) error {
 		userId,
 		reqBody.MinParticipants,
 		reqBody.MaxParticipants,
-		reqBody.StartDate/1000,
-		reqBody.EndDate/1000,
+		reqBody.StartDate,
+		reqBody.EndDate,
 		reqBody.Place,
 	)
 	err = row.Scan(&resBody.Uuid)
